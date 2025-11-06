@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: Figtree, system-ui, sans-serif;
+  color: white;
+  background-color: black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #eab308;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ca8a04;
+}
+
+::selection {
+  background: #eab308;
+  color: #000;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    text-shadow: 0 0 5px theme('colors.yellow.500'), 0 0 10px theme('colors.yellow.500'), 0 0 15px theme('colors.yellow.500');
+    filter: brightness(1);
+  }
+  50% {
+    text-shadow: 0 0 15px theme('colors.yellow.500'), 0 0 25px theme('colors.yellow.500'), 0 0 35px theme('colors.yellow.500');
+    filter: brightness(1.4);
+  }
+}
+
+@keyframes progress {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
