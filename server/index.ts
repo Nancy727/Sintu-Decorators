@@ -1,6 +1,8 @@
 import { performance } from "node:perf_hooks";
 import nodemailer from "nodemailer";
 import express, { Request, Response } from "express";
+import path from "path";
+import fs from "fs";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import cors from "cors";
@@ -484,6 +486,36 @@ app.delete("/api/admin/submissions/:id", authenticateAdmin, async (req, res) => 
     return res.status(500).json({ error: "Failed to delete submission" });
   }
 });
+
+// In production, try to serve the client build (Vite `dist`) and provide an SPA fallback
+if (!isDev) {
+  // Candidate locations for the client `dist` directory depending on how server is started
+  const clientDistCandidates = [
+    path.resolve(__dirname, "../dist"), // server run from project root (ts-node)
+    path.resolve(process.cwd(), "dist"), // server run from project root after build
+    path.resolve(__dirname, "../../dist"), // compiled server in a subfolder
+  ];
+
+  const clientDist = clientDistCandidates.find((p) => fs.existsSync(p));
+
+  if (clientDist) {
+    console.log(`[Startup] Serving client static from ${clientDist}`);
+    // Serve static assets
+    app.use(express.static(clientDist));
+
+    // SPA fallback: for any non-API GET request, return index.html so the client router can handle the route
+    app.get("*", (req, res, next) => {
+      if (req.method !== "GET") return next();
+      if (req.path.startsWith("/api")) return next();
+      return res.sendFile(path.join(clientDist, "index.html"));
+    });
+  } else {
+    console.warn(
+      "[Startup] No client 'dist' folder found; SPA fallback disabled. Build the client (npm run build) and place the 'dist' folder at one of:\n" +
+        clientDistCandidates.join("\n")
+    );
+  }
+}
 
 // Apply error handler last (must be after all routes)
 app.use(errorHandler);
