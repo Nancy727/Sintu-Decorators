@@ -118,7 +118,7 @@ function App() {
 
             {/* Admin Page */}
             <Route
-              path="/admin"
+              path="/admin1234"
               element={
                 <PageTransition>
                   <AdminPage />
