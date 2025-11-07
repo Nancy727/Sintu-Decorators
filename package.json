@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "tsx server/index.ts",
-    "dev": "concurrently \"npm:server\" \"npm:dev\""
+    "dev:full": "concurrently \"npm:server\" \"npm:dev\""
   },
   "dependencies": {
     "@lucide/lab": "^0.1.2",
